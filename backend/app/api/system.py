@@ -83,8 +83,11 @@ def start_all_servers():
     # 1. Locate WhatsApp Bot directory
     possible_wa_dirs = [
         Path.home() / "whatsapp-bot-server",
+        Path.home() / "debian",
         Path("/root/whatsapp-bot-server"),
-        Path(__file__).resolve().parent.parent.parent.parent / "whatsapp-bot-server"
+        Path("/root/debian"),
+        Path(__file__).resolve().parent.parent.parent.parent / "whatsapp-bot-server",
+        Path(__file__).resolve().parent.parent.parent.parent / "debian"
     ]
 
     wa_dir = next((d for d in possible_wa_dirs if (d / "start-debian.sh").exists()), None)
@@ -121,8 +124,11 @@ def restart_whatsapp():
     """
     possible_wa_dirs = [
         Path.home() / "whatsapp-bot-server",
+        Path.home() / "debian",
         Path("/root/whatsapp-bot-server"),
-        Path(__file__).resolve().parent.parent.parent.parent / "whatsapp-bot-server"
+        Path("/root/debian"),
+        Path(__file__).resolve().parent.parent.parent.parent / "whatsapp-bot-server",
+        Path(__file__).resolve().parent.parent.parent.parent / "debian"
     ]
     wa_dir = next((d for d in possible_wa_dirs if (d / "start-debian.sh").exists()), None)
 
