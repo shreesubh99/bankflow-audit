@@ -46,9 +46,27 @@ from fastapi.responses import FileResponse
 # Check for frontend build
 frontend_dist = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
 
+from app.core.tunnel import get_local_ip, ensure_ngrok_tunnel, get_ngrok_url
+
+@app.on_event("startup")
+async def startup_event():
+    local_ip = get_local_ip()
+    ngrok_url = ensure_ngrok_tunnel(8080)
+    print("\n" + "=" * 72)
+    print("  🚀 BANKFLOW AUDIT INTELLIGENCE ENGINE IS ONLINE")
+    print("  " + "-" * 68)
+    print(f"  🏠 Local LAN Access:        http://{local_ip}:8080")
+    if ngrok_url:
+        print(f"  🌍 Remote Internet Access:  {ngrok_url}")
+        print("     (Accessible from any PC, phone, or remote network anywhere!)")
+    else:
+        print("  🌍 Remote Ngrok Access:     Starting tunnel...")
+    print("=" * 72 + "\n")
+
 @app.get("/api/health")
 def health_check():
-    return {"status": "HEALTHY"}
+    return {"status": "HEALTHY", "local_ip": get_local_ip(), "ngrok_url": get_ngrok_url()}
+
 
 if frontend_dist.exists():
     app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets")), name="assets")

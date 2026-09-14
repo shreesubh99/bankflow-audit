@@ -16,6 +16,8 @@ def is_port_open(port: int, host: str = "127.0.0.1", timeout: float = 0.5) -> bo
     except Exception:
         return False
 
+from app.core.tunnel import get_local_ip, get_ngrok_url, ensure_ngrok_tunnel
+
 class ServerStatus(BaseModel):
     name: str
     port: int
@@ -29,6 +31,7 @@ class SystemOverviewDTO(BaseModel):
     whatsapp_agent: ServerStatus
     platform: str
     debian_ip: Optional[str] = None
+    ngrok_url: Optional[str] = None
 
 @router.get("/status", response_model=SystemOverviewDTO)
 def get_system_status():
@@ -42,19 +45,14 @@ def get_system_status():
     bot_online = is_port_open(3333)
     agent_online = is_port_open(8000)
 
-    # Detect local IP
-    local_ip = "127.0.0.1"
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-            s.connect(("8.8.8.8", 80))
-            local_ip = s.getsockname()[0]
-    except Exception:
-        pass
+    local_ip = get_local_ip()
+    ngrok_url = get_ngrok_url()
 
     return SystemOverviewDTO(
         all_running=(bank_online and bot_online and agent_online),
         platform="Debian/Linux" if os.name != "nt" else "Windows",
         debian_ip=local_ip,
+        ngrok_url=ngrok_url,
         bankflow_audit=ServerStatus(
             name="BankFlow Audit Intelligence",
             port=8080,
@@ -144,3 +142,14 @@ def restart_whatsapp():
             return {"success": True, "message": "WhatsApp Bot restarted successfully."}
 
     return {"success": True, "message": "WhatsApp processes cleaned."}
+
+@router.post("/tunnel/start")
+def start_tunnel_api():
+    """Trigger ngrok tunnel start for Port 8080"""
+    url = ensure_ngrok_tunnel(8080)
+    return {
+        "success": bool(url),
+        "public_url": url,
+        "message": f"Ngrok tunnel active at: {url}" if url else "Failed to establish ngrok tunnel."
+    }
+
