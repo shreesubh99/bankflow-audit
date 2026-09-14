@@ -9,7 +9,7 @@ from pathlib import Path
 
 logger = logging.getLogger("bankflow.tunnel")
 
-NGROK_DEFAULT_TOKEN = "31yGVbAOlk0V2i0vjxJLHGkLclx_6XXNTqL8u39utRass2MB8"
+NGROK_DEFAULT_TOKEN = "3JJNxFDVxF4bN1aEmOO5z8PdQl1_68npyebonUDGDWLogrCFS"
 
 def get_local_ip() -> str:
     """Discovers machine LAN IP address instead of 0.0.0.0"""

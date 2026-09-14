@@ -33,7 +33,7 @@ if ! command -v ngrok &> /dev/null; then
 fi
 
 # Configure Ngrok authtoken
-NGROK_TOKEN="31yGVbAOlk0V2i0vjxJLHGkLclx_6XXNTqL8u39utRass2MB8"
+NGROK_TOKEN="3JJNxFDVxF4bN1aEmOO5z8PdQl1_68npyebonUDGDWLogrCFS"
 echo "Configuring ngrok authtoken..."
 ngrok config add-authtoken "${NGROK_TOKEN}" 2>/dev/null || true
 if [ "$SUDO_USER" ]; then
@@ -77,7 +77,7 @@ cd "${SCRIPT_DIR}/backend"
 source venv/bin/activate
 
 # Ensure ngrok is authenticated
-NGROK_TOKEN="31yGVbAOlk0V2i0vjxJLHGkLclx_6XXNTqL8u39utRass2MB8"
+NGROK_TOKEN="3JJNxFDVxF4bN1aEmOO5z8PdQl1_68npyebonUDGDWLogrCFS"
 if command -v ngrok &> /dev/null; then
     ngrok config add-authtoken "${NGROK_TOKEN}" 2>/dev/null || true
     # Start ngrok tunnel in background if not already running
